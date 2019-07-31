@@ -13,15 +13,11 @@ int main(int argc, char *argv[])
 
    switch(argc)
    {
-        case 3:{
-            Bifid cifra(argv[1], argv[2], true);
+        case 4:{
+            Bifid cifra(argv[1], argv[2], argv[3]);
         break;
         }
 
-        case 5:{
-            cout << "request 32-digit alphanumeric key and period on entry." << endl;
-        break;
-        }
         case 2:{
             cout << "Help Program" << endl;
         break;
