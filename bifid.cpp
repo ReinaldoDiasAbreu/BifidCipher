@@ -5,21 +5,23 @@
 #include <cctype>
 using namespace std;
 
-Bifid::Bifid( char* arqin, char* arqout, bool def)
+Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
 {
-    if(def)
+    if(def == 1)
     {
         Create_Table();
-        long int tam = TamFile(arqin);
+        long int tam = TamFile(arqin); 
         srand(time(NULL));
         periodo = 2 + (rand() % 4);
-
         char *str = new char[tam];
-        int *line = new int[tam];
-        int *col = new int[tam];
-
-        if(Load_String(arqin, str, line, col, tam))
+        
+        if(Read_file(str, arqin, tam))
         {
+            int *line = new int[tam];
+            int *col = new int[tam];
+            
+            Load_String(str, line, col);
+            
             int *Cryptline = PeriodLine(line, col, periodo);
             GroupPairs(line, col, Cryptline);
             ParseToCode(str, line, col);
@@ -29,24 +31,70 @@ Bifid::Bifid( char* arqin, char* arqout, bool def)
             cout << periodo << " ";
             PrintTable();
             cout << " " << arqout << endl;
+
+            delete[] line;
+            delete[] col;
         }
         else
         {
-            cout << "File not fonud!" << endl;
+            cout << "Input file not found!" << endl;
         }
-
         delete[] str;
-        delete[] line;
-        delete[] col;
-
     }
     else
     {
-
+        if( (pin >= 2 && pin <=6) && (strlen(key) == 36) )
+        {
+          
+        }
+        else
+        {
+            cout << "Invalid Parameters!" << endl;
+        }
+        
     }
 }
 
-void Bifid::Create_Table()  // Cria tablela randominca de codificacao
+bool Bifid::Read_file(char *str_dest, char *file, long int tam)  // Ler o arquivo e copia para um vetor char
+{
+    FILE *arq = fopen(file, "r");
+    
+    if(arq != NULL)
+    {
+        for(long int i = 0; i < tam; i++)
+        {
+            fscanf(arq, "%c", &str_dest[i]);
+        }
+        fclose(arq);
+        return true;
+    }
+    else
+    {
+        fclose(arq);
+        return false;
+    }
+}
+
+long int Bifid::TamFile(char* arq_in_name)  // Calcula a quantidade de caracteres no arquivo
+{
+    FILE * arq = fopen(arq_in_name, "r");
+    long int tam;
+    if(arq != NULL)
+    {
+        fseek(arq, 0, SEEK_END);
+        tam = ftell(arq);
+    }
+    else
+    {
+        tam = 0;
+    }
+    fclose(arq);
+    return tam;
+}
+
+// #################################### Funçoes de Criptografia ####################################
+
+void Bifid::Create_Table()  // Cria tabela randominca de codificacao
 {
     char caracteres[36] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9'};
     srand(time(NULL));
@@ -70,50 +118,20 @@ char Bifid::Extract(char* c, int t, int p) // Retira e retorna um caracter selec
     return aux;
 }
 
-long int Bifid::TamFile(const char* arq_in_name)  // Calcula a quantidade de caracteres no arquivo
+void Bifid::Load_String(char* str_in, int* l, int*c) // Carrega o vetor com caracteres permitidos e linhas e colunas
 {
-    FILE * arq = fopen(arq_in_name, "r");
-    long int tam;
-    if(arq != NULL)
-    {
-        fseek(arq, 0, SEEK_END);
-        tam = ftell(arq);
-    }
-    else
-    {
-        tam = 0;
-    }
-    fclose(arq);
-    return tam;
-}
-
-bool Bifid::Load_String(char* file_name, char* str, int* l, int*c, long int tam) // Carrega o vetor com caracteres permitidos
-{
-    FILE *arq_in = fopen(file_name, "r");
-    char aux;
     int linha, coluna;
     str_size = 0;
-    if(arq_in != NULL)
+
+    for(long int i=0; i < strlen(str_in); i++)
     {
-        for(long int i=0; i < tam; i++)
+        char aux = tolower(str_in[i]);
+        if(Search(aux, &linha, &coluna))
         {
-            fscanf(arq_in, "%c", &aux);
-            aux = tolower(aux);
-            if(Search(aux, &linha, &coluna))
-            {
-                str[str_size] = aux;
-                l[str_size] = linha;
-                c[str_size] = coluna;
-                str_size++;
-            }
+            l[str_size] = linha;
+            c[str_size] = coluna;
+            str_size++;
         }
-        fclose(arq_in);
-        return true;
-    }
-    else
-    {
-        fclose(arq_in);
-        return false;
     }
 }
 
@@ -130,7 +148,7 @@ bool Bifid::Search(char c, int *lin, int *col)  // Busca caracter na table e rep
     return false;
 }
 
-int* Bifid::PeriodLine(int *line, int *col, int p) // Agrupa linhas e colunas com período passado em um vetor
+int* Bifid::PeriodLine(int *line, int *col, int p) // Retorna vetor com o agrupamento de coordendas de linha e coluna
 {
     int* PeriodLineCrypt = new int[str_size*2];
     long int pcol, pline, pcrypt;
@@ -158,7 +176,7 @@ int* Bifid::PeriodLine(int *line, int *col, int p) // Agrupa linhas e colunas co
     return PeriodLineCrypt;
 }
 
-void Bifid::GroupPairs(int *line, int *col, int*crypt) // Separa grupo de linha e coluna
+void Bifid::GroupPairs(int *line, int *col, int*crypt) // Separa grupo de linha e coluna em pares correspondentes
 {
     long int cline, ccol, ccrypt;
     cline = ccol = ccrypt = 0;
@@ -169,7 +187,7 @@ void Bifid::GroupPairs(int *line, int *col, int*crypt) // Separa grupo de linha 
     }
 }
 
-void Bifid::ParseToCode(char *str, int *line, int *col) // Passa linha e coluna para codificacao da tabela
+void Bifid::ParseToCode(char *str, int *line, int *col) // Passa linha e coluna para codificacao da tabela e salva em str
 {
     for(int i=0; i < str_size; i++)
     {
@@ -177,11 +195,11 @@ void Bifid::ParseToCode(char *str, int *line, int *col) // Passa linha e coluna 
     }
 }
 
-void Bifid::WriteOut(char *str, char *file_out)  // Escreve a string no arq de saida tentando nao sobreescrever se existente
+void Bifid::WriteOut(char *str, char *file_out)  // Escreve a string no arq de saida tentando nao sobreescrever arquivo existente
 {
     char nome[100];
     strcpy(nome, file_out);
-    for(int i=0; i < 10000; i++)
+    for(int i=0; i < 10000; i++) // Tenta criar um arquivo com um nome diferente caso exista
     {
         FILE *tfile = fopen(nome, "r");
         if( tfile != NULL)
@@ -203,6 +221,7 @@ void Bifid::WriteOut(char *str, char *file_out)  // Escreve a string no arq de s
     FILE *fout = fopen(file_out, "w");
     for(long int i=0; i < str_size; i++)
         fprintf(fout, "%c", str[i]);
+    fprintf(fout, "\n");
     fclose(fout);
 }
 
@@ -216,3 +235,8 @@ void Bifid::PrintTable() // Imprime tabela de codificacao
         }
     }
 }
+
+
+// #################################### Funçoes de Descriptografia ####################################
+
+

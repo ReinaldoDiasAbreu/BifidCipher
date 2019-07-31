@@ -14,7 +14,12 @@ int main(int argc, char *argv[])
    switch(argc)
    {
         case 4:{
-            Bifid cifra(argv[1], argv[2], argv[3]);
+            Bifid cifra(argv[1], argv[2], atoi(argv[3]), 0, NULL);
+        break;
+        }
+
+        case 6:{
+            Bifid cifra(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
         break;
         }
 
