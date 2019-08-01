@@ -17,5 +17,5 @@ The program will always generate an output file and will not overwrite if the pa
 
 Possible improvements will be added for recognition of punctuation, spaces, and line breaks. Increasing the key and the difficulty of decrypting.
 
-The security of this method is given by the amount of possible keys that can be generated, so so far we have: 5.3193679e+56 possibilities.
+The security of this method is given by the amount of possible keys that can be generated, so so far we have: 1,859966634e42 possibilities.
 
