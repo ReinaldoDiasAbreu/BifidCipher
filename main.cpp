@@ -4,13 +4,6 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    /* 
-        ./bifid arq_in name_file_out def
-        def: 
-            true -> default: generate alphanumeric key and period automatically
-            false-> request 32-digit alphanumeric key and period on entry.
-    */
-
    switch(argc)
    {
         case 4:{
@@ -24,12 +17,24 @@ int main(int argc, char *argv[])
         }
 
         case 2:{
-            cout << "Help Program" << endl;
+            cout << "           Help Bifid Cipher 0.1" << endl;
+            cout << "   Comando: " << endl << endl;
+            cout << "       ./bifid arq_in arq_out op period key" << endl << endl;
+            cout << "   arq_in  -> Input File with extension if any" << endl;
+            cout << "   arq_out -> Name Output File" << endl;
+            cout << "   op      -> Operation Number (1 - Encrypt / 0 - Decrypt)" << endl;
+            cout << "   period  -> Period Number" << endl;
+            cout << "   key     -> 36-character alphanumeric key" << endl << endl;
+
+            cout << "   More: https://github.com/ReinaldoDiasAbreu/BifidCipher" << endl;
+            cout << "   By Reinaldo Junio Dias de Abreu - 07/2019" << endl;
+
         break;
         }
     
         default:{
-            cout << "Erro" << endl;
+            cout << "Error: Invalid Syntax" << endl;
+            cout << "Try ./bifid help" << endl;
         break;
         }
    }
