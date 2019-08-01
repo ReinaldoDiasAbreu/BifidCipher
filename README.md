@@ -9,7 +9,9 @@ At the moment the algorithm does not consider accents spaces, punctuation and li
 
 See below an example of execution:
 
-![](exemple.png)
+![](exemple2.png)
+
+![](exemple1.png)
 
 The program will always generate an output file and will not overwrite if the passed name already exists.
 
