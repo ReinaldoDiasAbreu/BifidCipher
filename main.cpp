@@ -4,25 +4,32 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-   switch(argc)
-   {
+    int period = 0;
+    char key[50] = "";
+    switch(argc)
+    {
         case 4:{
-            Bifid cifra(argv[1], argv[2], atoi(argv[3]), 0, NULL);
-        break;
-        }
-
-        case 6:{
-            Bifid cifra(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]), argv[5]);
+            if(atoi(argv[3]) == 1)
+                Bifid cifra(argv[1], argv[2], atoi(argv[3]), 0, NULL);
+            else 
+            {
+                cout << "Period: ";
+                cin >> period;
+                cout << "Key[49]: ";
+                cin >> key;
+                Bifid cifra(argv[1], argv[2], atoi(argv[3]), period, key);
+            }
         break;
         }
 
         case 2:{
             cout << "           Help Bifid Cipher 0.1" << endl;
             cout << "   Comando: " << endl << endl;
-            cout << "       ./bifid arq_in arq_out op period key" << endl << endl;
+            cout << "       ./bifid arq_in arq_out op" << endl << endl;
             cout << "   arq_in  -> Input File with extension if any" << endl;
             cout << "   arq_out -> Name Output File" << endl;
-            cout << "   op      -> Operation Number (1 - Encrypt / 0 - Decrypt)" << endl;
+            cout << "   op      -> Operation Number (1 - Encrypt / 0 - Decrypt)" << endl << endl;
+            cout << "   In the option Decrypt is necessary: " << endl << endl;
             cout << "   period  -> Period Number" << endl;
             cout << "   key     -> 36-character alphanumeric key" << endl << endl;
 
@@ -37,7 +44,7 @@ int main(int argc, char *argv[])
             cout << "Try ./bifid help" << endl;
         break;
         }
-   }
+    }
 
     return 0;
 }

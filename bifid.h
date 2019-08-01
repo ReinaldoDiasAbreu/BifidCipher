@@ -4,9 +4,10 @@
 class Bifid{
 
     private:
-        char CARACTERES[37] = "abcdefghijklmnopqrstuvwxyz0123456789"; // Accepted Characters
-        int QUANT = 36;
-        char table[6][6];
+        char CARACTERES[50] = "abcdefghijklmnopqrstuvwxyz0123456789.,:_()=!?/-+*"; // Accepted Characters
+        int QUANT = 49;
+        int TAM_TABLE = 7;
+        char table[7][7];
         long int periodo = 0;
         long int str_size = 0;
         

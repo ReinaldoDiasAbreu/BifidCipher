@@ -42,7 +42,7 @@ Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
     }
     else // Decryption
     {
-        if( (pin >= 2 && pin <=6) && (strlen(key) == QUANT) )
+        if( (pin >= 2 && pin <= 6) && (strlen(key) == QUANT) )
         { 
             long int tam = TamFile(arqin); 
             char *str = new char[tam];
@@ -85,11 +85,12 @@ bool Bifid::Read_file(char *str_dest, char *file, long int tam)  /// Read file a
         for(long int i= 0; i < tam; i++)
         {
             fscanf(arq, "%c", &aux);
-            aux = tolower(aux);
+            if(aux == ' ') aux = '_';
+            else aux = tolower(aux);
+            
             if(CaracterPermitido(aux) == true)
-            {
                 str_dest[str_size++] = aux;
-            }
+            
         }
         fclose(arq);
         return true;
@@ -126,7 +127,10 @@ void Bifid::WriteOut(char *str, char *file_out)  /// Write string to output file
 
     FILE *fout = fopen(file_out, "w");
     for(long int i=0; i < str_size; i++)
+    {
+        if(str[i] == '_') str[i] = ' ';
         fprintf(fout, "%c", str[i]);
+    }
     fprintf(fout, "\n");
     fclose(fout);
 }
@@ -150,8 +154,8 @@ long int Bifid::TamFile(char* arq_in_name)  /// Calculate the amount of characte
 
 bool Bifid::Search(char c, int *lin, int *col)  /// Search character in table and pass row and column if any
 {
-    for(int i=0; i < 6; i++)
-        for(int j=0; j < 6; j++)
+    for(int i=0; i < TAM_TABLE; i++)
+        for(int j=0; j < TAM_TABLE; j++)
             if(c == table[i][j])
             {
                 *lin = i;
@@ -177,9 +181,10 @@ void Bifid::ParseToCord(char *str, int *line, int *col, long int tam)  /// Pass 
 
 void Bifid::PrintTable() /// Print inline coding table
 {
-    for(int i=0; i < 6; i++)
+  
+    for(int i=0; i < TAM_TABLE; i++)
     {
-        for(int j=0; j < 6; j++)
+        for(int j=0; j < TAM_TABLE; j++)
         {
             cout << table[i][j];
         }
@@ -204,9 +209,9 @@ void Bifid::Create_Table()  /// Create random coding table
     int val = QUANT;
     char *str = new char[QUANT+1];
     strcpy(str, CARACTERES);
-    for(int i=0; i < 6; i++)
+    for(int i=0; i < TAM_TABLE; i++)
     {
-        for(int j=0; j < 6; j++)
+        for(int j=0; j < TAM_TABLE; j++)
         {
             int p = rand() % val;
             table[i][j] = Extract(str, p);
@@ -281,8 +286,8 @@ void Bifid::GroupPairs(int *line, int *col, int*crypt) /// Separate row and colu
 void Bifid::FillTable(char *key)  /// Load key into coding table
 {
     int cont = 0;
-    for(int i=0; i<6; i++)
-        for(int j=0; j<6; j++)
+    for(int i=0; i<TAM_TABLE; i++)
+        for(int j=0; j<TAM_TABLE; j++)
             table[i][j] = key[cont++];
 }
 
