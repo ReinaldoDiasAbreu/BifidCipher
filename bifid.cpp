@@ -2,13 +2,12 @@
 #include <iostream>
 #include <ctime>
 #include <cstring> 
-#include <cctype>
 
 using namespace std;
 
 Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
 {
-    if(def == 1) // Criptografia
+    if(def == 1) // Encryption
     {
         Create_Table();
         long int tam = TamFile(arqin); 
@@ -41,7 +40,7 @@ Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
         }
         delete[] str;
     }
-    else // Descriptografia
+    else // Decryption
     {
         if( (pin >= 2 && pin <=6) && (strlen(key) == QUANT) )
         { 
@@ -75,7 +74,9 @@ Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
     }
 }
 
-bool Bifid::Read_file(char *str_dest, char *file, long int tam)  // Ler o arquivo e copia para um vetor char
+// #################################### Common Functions ####################################
+
+bool Bifid::Read_file(char *str_dest, char *file, long int tam)  /// Read file and copy for a vector
 {
     FILE *arq = fopen(file, "r");
     char aux;
@@ -100,7 +101,7 @@ bool Bifid::Read_file(char *str_dest, char *file, long int tam)  // Ler o arquiv
     }
 }
 
-void Bifid::WriteOut(char *str, char *file_out)  // Escreve a string no arq de saida tentando nao sobreescrever arquivo existente
+void Bifid::WriteOut(char *str, char *file_out)  /// Write string to output file trying not to overwrite existing file
 {
     char nome[100];
     strcpy(nome, file_out);
@@ -130,7 +131,7 @@ void Bifid::WriteOut(char *str, char *file_out)  // Escreve a string no arq de s
     fclose(fout);
 }
 
-long int Bifid::TamFile(char* arq_in_name)  // Calcula a quantidade de caracteres no arquivo
+long int Bifid::TamFile(char* arq_in_name)  /// Calculate the amount of characters in the file
 {
     FILE * arq = fopen(arq_in_name, "r");
     long int tam;
@@ -147,7 +148,7 @@ long int Bifid::TamFile(char* arq_in_name)  // Calcula a quantidade de caractere
     return tam;
 }
 
-bool Bifid::Search(char c, int *lin, int *col)  // Busca caracter na table e repassa linha e coluna se existir
+bool Bifid::Search(char c, int *lin, int *col)  /// Search character in table and pass row and column if any
 {
     for(int i=0; i < 6; i++)
         for(int j=0; j < 6; j++)
@@ -160,7 +161,7 @@ bool Bifid::Search(char c, int *lin, int *col)  // Busca caracter na table e rep
     return false;
 }
 
-void Bifid::ParseToCode(char *str, int *line, int *col) // Passa linha e coluna para codificacao da tabela e salva em str
+void Bifid::ParseToCode(char *str, int *line, int *col) /// Pass row and column through table encoding to save to str
 {
     for(int i=0; i < str_size; i++)
     {
@@ -168,13 +169,13 @@ void Bifid::ParseToCode(char *str, int *line, int *col) // Passa linha e coluna 
     }
 }
 
-void Bifid::ParseToCord(char *str, int *line, int *col, long int tam)  // Passa caracteres para codigo em linha e coluna
+void Bifid::ParseToCord(char *str, int *line, int *col, long int tam)  /// Pass characters to row and column code
 {
     for(long int i=0; i < tam; i++)
         Search(str[i], &line[i], &col[i]);
 }
 
-void Bifid::PrintTable() // Imprime tabela de codificacao
+void Bifid::PrintTable() /// Print inline coding table
 {
     for(int i=0; i < 6; i++)
     {
@@ -186,7 +187,7 @@ void Bifid::PrintTable() // Imprime tabela de codificacao
     cout << endl;
 }
 
-bool Bifid::CaracterPermitido(char c)
+bool Bifid::CaracterPermitido(char c) /// Checks if the character is allowed
 {
     for(int i=0; i < QUANT; i++)
         if(c == CARACTERES[i])
@@ -195,9 +196,9 @@ bool Bifid::CaracterPermitido(char c)
 }
 
 
-// #################################### Funçoes de Criptografia ####################################
+// #################################### Encryption Functions ####################################
 
-void Bifid::Create_Table()  // Cria tabela randominca de codificacao
+void Bifid::Create_Table()  /// Create random coding table
 {
     srand(time(NULL));
     int val = QUANT;
@@ -214,7 +215,7 @@ void Bifid::Create_Table()  // Cria tabela randominca de codificacao
     }
 }
 
-char Bifid::Extract(char *str, int p) // Retira e retorna um caracter selecionado no vetor
+char Bifid::Extract(char *str, int p) /// Removes and returns a selected character in the vector.
 {
     char aux = str[p];
     for(int i=p; i < QUANT; i++)
@@ -222,7 +223,7 @@ char Bifid::Extract(char *str, int p) // Retira e retorna um caracter selecionad
     return aux;
 }
 
-void Bifid::Load_String(char* str_in, int* l, int*c) // Carrega o vetor com caracteres permitidos e linhas e colunas
+void Bifid::Load_String(char* str_in, int* l, int*c) /// Load vector with allowed characters and rows and columns
 {
     int linha, coluna;
     for(long int i=0; i < str_size; i++)
@@ -235,7 +236,7 @@ void Bifid::Load_String(char* str_in, int* l, int*c) // Carrega o vetor com cara
     }
 }
 
-int* Bifid::PeriodLine(int *line, int *col, int p) // Retorna vetor com o agrupamento de coordendas de linha e coluna
+int* Bifid::PeriodLine(int *line, int *col, int p) /// Returns vector with row and column coordinate grouping
 {
     int* PeriodLineCrypt = new int[str_size*2];
     long int pcol, pline, pcrypt;
@@ -263,7 +264,7 @@ int* Bifid::PeriodLine(int *line, int *col, int p) // Retorna vetor com o agrupa
     return PeriodLineCrypt;
 }
 
-void Bifid::GroupPairs(int *line, int *col, int*crypt) // Separa grupo de linha e coluna em pares correspondentes
+void Bifid::GroupPairs(int *line, int *col, int*crypt) /// Separate row and column group into matching pairs
 {
     long int cline, ccol, ccrypt;
     cline = ccol = ccrypt = 0;
@@ -274,10 +275,10 @@ void Bifid::GroupPairs(int *line, int *col, int*crypt) // Separa grupo de linha 
     }
 }
 
-// #################################### Funçoes de Descriptografia ####################################
+// #################################### Decryption Functions ####################################
 
 
-void Bifid::FillTable(char *key)  // Carrega a chave na tabela de codificacao
+void Bifid::FillTable(char *key)  /// Load key into coding table
 {
     int cont = 0;
     for(int i=0; i<6; i++)
@@ -285,7 +286,7 @@ void Bifid::FillTable(char *key)  // Carrega a chave na tabela de codificacao
             table[i][j] = key[cont++];
 }
 
-int* Bifid::UndoPairs(int *line, int *col) // Defaz pares de linha e colina e retorna um vetor na sequencia
+int* Bifid::UndoPairs(int *line, int *col) /// Undo row and column pairs and return a vector in sequence
 {
    int *crypt = new int[str_size*2];
    long int c = 0;
@@ -297,7 +298,7 @@ int* Bifid::UndoPairs(int *line, int *col) // Defaz pares de linha e colina e re
    return crypt;
 }
 
-void Bifid::UndoLinePeriod(int *line_crypt, int *line, int *col, int p) // Remove o embaralhamento por periodo e retorna a linha e colunas originais
+void Bifid::UndoLinePeriod(int *line_crypt, int *line, int *col, int p) /// Remove period shuffle and return original row and columns
 {
     long int pcol, pline, pcrypt, cont;
     pcol = pline = pcrypt = 0;

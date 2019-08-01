@@ -1,18 +1,16 @@
 #ifndef BIFID_H
 #define BIFID_H
 
-#include <cstdio>
-
 class Bifid{
 
     private:
-        char CARACTERES[37] = "abcdefghijklmnopqrstuvwxyz0123456789"; 
+        char CARACTERES[37] = "abcdefghijklmnopqrstuvwxyz0123456789"; // Accepted Characters
         int QUANT = 36;
         char table[6][6];
         long int periodo = 0;
         long int str_size = 0;
         
-        // ######################################## Funçoes Comuns ########################################
+        // #################################### Common Functions ####################################
 
         long int TamFile( char* arq_in_name);
         bool Read_file(char *str_dest, char *file, long int tam);
@@ -23,7 +21,7 @@ class Bifid{
         void PrintTable();
         bool CaracterPermitido(char c);
 
-        // #################################### Funçoes de Criptografia ####################################
+       // #################################### Encryption Functions ####################################
 
         void Create_Table();
         char Extract(char *str, int p);
@@ -31,7 +29,7 @@ class Bifid{
         int* PeriodLine(int *line, int *col, int p);
         void GroupPairs(int *line, int *col, int*crypt);
         
-        // ################################### Funçoes de Descriptografia ###################################
+        // #################################### Decryption Functions ####################################
 
         void FillTable(char *key);
         int* UndoPairs(int *line, int *col);

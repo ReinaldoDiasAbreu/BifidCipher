@@ -1,8 +1,8 @@
-# Arquivo Makefile
+# File Makefile
 
 all: bifid clean
-	@echo "Compilação Concluída!"
-	@echo "Pare executar digite: ./bifid help"
+	@echo "Compilation Completed!"
+	@echo "To run type: ./bifid help"
 
 bifid: main.o bifid.o
 	g++ -std=c++11 -g -Wall main.o bifid.o -o bifid
