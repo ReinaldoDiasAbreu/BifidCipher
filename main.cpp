@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
             cout << "   op      -> Operation Number (1 - Encrypt / 0 - Decrypt)" << endl << endl;
             cout << "   In the option Decrypt is necessary: " << endl << endl;
             cout << "   period  -> Period Number" << endl;
-            cout << "   key     -> 36-character alphanumeric key" << endl << endl;
+            cout << "   key     -> 49-character alphanumeric key" << endl << endl;
 
             cout << "   More: https://github.com/ReinaldoDiasAbreu/BifidCipher" << endl;
             cout << "   By Reinaldo Junio Dias de Abreu - 07/2019" << endl;

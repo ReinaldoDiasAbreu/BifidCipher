@@ -70,12 +70,11 @@ Bifid::Bifid( char* arqin, char* arqout, int def, int pin, char* key)
         {
             cout << "Invalid Parameters!" << endl;
         }
-        
     }
 }
 
 // #################################### Common Functions ####################################
-
+// Funcoes comuns do algoritmo de criptografia bifida cifrada
 bool Bifid::Read_file(char *str_dest, char *file, long int tam)  /// Read file and copy for a vector
 {
     FILE *arq = fopen(file, "r");
@@ -168,9 +167,7 @@ bool Bifid::Search(char c, int *lin, int *col)  /// Search character in table an
 void Bifid::ParseToCode(char *str, int *line, int *col) /// Pass row and column through table encoding to save to str
 {
     for(int i=0; i < str_size; i++)
-    {
         str[i] = table[line[i]][col[i]];
-    }
 }
 
 void Bifid::ParseToCord(char *str, int *line, int *col, long int tam)  /// Pass characters to row and column code
@@ -246,7 +243,7 @@ int* Bifid::PeriodLine(int *line, int *col, int p) /// Returns vector with row a
     int* PeriodLineCrypt = new int[str_size*2];
     long int pcol, pline, pcrypt;
     pcol = pline = pcrypt= 0;
-
+    
     for(long int i=0; i<str_size*2; i+=p*2)
     {
         for(long int l=0; l < p; l++)
